@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.laioffer.spotify'
+    namespace 'com.hmy.spotify'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.laioffer.spotify"
+        applicationId 'com.hmy.spotify'
         minSdk 23
         targetSdk 33
         versionCode 1
