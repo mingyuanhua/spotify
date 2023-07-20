@@ -1,3 +1,8 @@
+<!-- 为什么要把String放到strings.xml文件里？因为会用key name来指代
+原因是因为要试用各个国家不同的语言 系统换语言的时候可以用同样的key call到不同的语言-->
 <resources>
     <string name="app_name">Spotify</string>
+    <!--    add bottomNavigation item name-->
+    <string name="menu_home">Home</string>
+    <string name="menu_favorite">Favorite</string>
 </resources>
