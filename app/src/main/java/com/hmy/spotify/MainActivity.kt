@@ -49,14 +49,18 @@ class MainActivity : AppCompatActivity() {
         // findViewById拿到大的安卓的view 这里是BottomNavigationView
         val navView = findViewById<BottomNavigationView>(R.id.nav_view)
 
+        // controller
         val navHostFragment =supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-
         val navController = navHostFragment.navController
+
+        // data model
         navController.setGraph(R.navigation.nav_graph)
 
+        // 把view和Controller联系起来了
         NavigationUI.setupWithNavController(navView, navController)
 
+        // 把MenuItem也和Nav Controller联系到了一起  MenuItem就是Home和Favorite
         // https://stackoverflow.com/questions/70703505/navigationui-not-working-correctly-with-bottom-navigation-view-implementation
         navView.setOnItemSelectedListener{
             NavigationUI.onNavDestinationSelected(it, navController)
