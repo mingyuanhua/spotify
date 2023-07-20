@@ -1,15 +1,14 @@
 package com.hmy.spotify
 
 import android.os.Bundle
-import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hmy.spotify.ui.theme.SpotifyTheme
 
 
@@ -25,22 +24,44 @@ import com.hmy.spotify.ui.theme.SpotifyTheme
 
 // 先创建navigation view，里面每一个item都是menu
 
+// 命名习惯是 如果main class是MainActivity 那么layout就是activity_main.xml
 
+// graph是data model，FragmentView是View，NavHost里的NavController就是Controller
 
 // customized extend AppCompatActivity
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            SpotifyTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Greeting("Android")
-                }
-            }
+//        setContent {
+//            SpotifyTheme {
+//                // A surface container using the 'background' color from the theme
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = MaterialTheme.colors.background
+//                ) {
+//                    Greeting("Android")
+//                }
+//            }
+//        }
+
+        setContentView(R.layout.activity_main)
+
+        // findViewById拿到大的安卓的view 这里是BottomNavigationView
+        val navView = findViewById<BottomNavigationView>(R.id.nav_view)
+
+        val navHostFragment =supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+
+        val navController = navHostFragment.navController
+        navController.setGraph(R.navigation.nav_graph)
+
+        NavigationUI.setupWithNavController(navView, navController)
+
+        // https://stackoverflow.com/questions/70703505/navigationui-not-working-correctly-with-bottom-navigation-view-implementation
+        navView.setOnItemSelectedListener{
+            NavigationUI.onNavDestinationSelected(it, navController)
+            navController.popBackStack(it.itemId, inclusive = false)
+            true
         }
     }
 }
