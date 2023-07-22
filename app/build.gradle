@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -89,6 +91,10 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
 
     // hilt injection
+    // hilt利用java的dagger来做dependency injection，包了层安卓的壳
+    def hilt_version = "2.44"
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     // mvvm viewModel
 
