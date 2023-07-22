@@ -1,6 +1,7 @@
 package com.hmy.spotify
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -9,7 +10,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.hmy.spotify.network.NetworkApi
+import com.hmy.spotify.network.NetworkModule
 import com.hmy.spotify.ui.theme.SpotifyTheme
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 // 如果抽象成MVC的话 C(Controller)就是Activity和Fragment -- Activity有生命周期
@@ -29,7 +37,25 @@ import com.hmy.spotify.ui.theme.SpotifyTheme
 // graph是data model，FragmentView是View，NavHost里的NavController就是Controller
 
 // customized extend AppCompatActivity
+
+// flow: retrofit -> endpoint -> OKHTTP -> Service(0.0.0.0:8080) -> JSON -> GsonCon -> Kotlin: List<Section> -- UI
+
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    // MainActivity是谁new的呢？因为MainActivity是系统来new的
+    // android里有一系列的东西 Android Components 都是被系统new出来的
+    // hilt会找到new出来的object，然后再给他传参
+    // 因为是之后再init 所以是lateinit
+
+    // class name @Inject constructor() 就不需要写provide了，可以直接inject进来
+    // 自己写class这样可以告诉hilt让hilt认识
+
+    // Inject表明了这个参数是用问工厂要来的，不需要指明工厂
+    // 要的方式是调用provide方法，hilt帮忙自动实现
+    // hilt帮我们注入进来的
+    @Inject
+    lateinit var api: NetworkApi
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContent {
@@ -54,6 +80,8 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
+        // Main thread / UI thread 所以Fragment和Activity不指名都是在这个thread 负责UI绘制
+
         // data model
         navController.setGraph(R.navigation.nav_graph)
 
@@ -66,6 +94,14 @@ class MainActivity : AppCompatActivity() {
             NavigationUI.onNavDestinationSelected(it, navController)
             navController.popBackStack(it.itemId, inclusive = false)
             true
+        }
+
+        // Test retrofit
+        GlobalScope.launch(Dispatchers.IO) {
+            // comment out 不需要这一行了，因为hilt帮忙inject了
+            // val api = NetworkModule.provideRetrofit().create(NetworkApi::class.java)
+            val response = api.getHomeFeed().execute().body()
+            Log.d("Network", response.toString())
         }
     }
 }
