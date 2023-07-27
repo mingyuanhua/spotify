@@ -1,8 +1,10 @@
 package com.hmy.spotify.network
 
+import com.hmy.spotify.datamodel.Playlist
 import com.hmy.spotify.datamodel.Section
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 // retrofit帮忙做了Implementation，省去了实现把JSON变成API call of List of Section
 // List of Section是response，包裹住Call这个Wrapper里面
@@ -12,4 +14,8 @@ import retrofit2.http.GET
 interface NetworkApi {
     @GET("feed")
     fun getHomeFeed(): Call<List<Section>>
+
+    @GET("playlist/{id}")
+    fun getPlaylist(@Path("id") id: Int): Call<Playlist>
+
 }
