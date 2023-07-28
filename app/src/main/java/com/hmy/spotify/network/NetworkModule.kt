@@ -15,10 +15,14 @@ import javax.inject.Singleton
 // Module是我们拿依赖的工厂，可以provide retrofit
 // provide singleton代表了整个App里只能有一份retrofit
 
+// 只要App run了那他永远就是这个object 那么他就是singleton
 // InstallIn
 
 // 定义了工厂如何provide retrofit，也可以定义NetworkApi
 
+
+// 如果我希望 API是跟着Activity走的话 可以InstallIn ActivityComponent
+// 现在就不是Singleton了 而是ActivityScope
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
