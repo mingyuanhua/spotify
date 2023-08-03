@@ -22,6 +22,7 @@ import com.hmy.spotify.R
 import com.hmy.spotify.datamodel.Album
 import com.hmy.spotify.datamodel.Section
 
+// update HomeScreen with stateless content compose HomeScreenContent and HomeScreenHeader
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel, onTap: (Album) -> Unit) {
