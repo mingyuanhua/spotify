@@ -107,7 +107,7 @@ dependencies {
     implementation "androidx.room:room-ktx:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
 
-    // exoplayer
+    // exoplayer for playback
     def exoplayerVersion = "2.18.2"
     implementation "com.google.android.exoplayer:exoplayer-core:${exoplayerVersion}"
 }
